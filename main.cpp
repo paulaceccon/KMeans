@@ -9,12 +9,13 @@
 #include <cmath>
 #include <vector>
 #include "Point.h"
+#include "KMeans.h"
 
 #ifdef __APPLE__
         #include <OpenGL/gl.h>
         #include <GLUT/glut.h>
 #else
-        #include <GL\glut.h>
+        #include <GL/glut.h>
 #endif
 
 void display( void );
@@ -22,11 +23,19 @@ void reshape( int width, int heigh );
 void mouse( int button, int state, int x, int y );
 void renderGrid( void );
 void renderPoints( void );
+void keyboard( unsigned char key, int x, int y );
+void initialization( void );
 
 using namespace std;
 
 // Pontos de entrada.
 std::vector<Point> points;
+
+KMeans * kmeans = 0;
+
+unsigned int textureId;
+
+int numberClusters = 4;
 
 
 // Define o sistema de coordenadas: (-winW, winW) em X
@@ -42,6 +51,8 @@ const double lenghGrid = 25.0;
 int widthWin = 600, heightWin = 600;
 // Cor de fundo da janela e do grid. 1.0f para preto e 0.0f para branco.
 float colorGrid = 0.0f;
+
+
 
 /**
  * Função principal.
@@ -75,18 +86,52 @@ int main( int argc, char** argv )
     // aparece pela primeira vez na tela.
     glutReshapeFunc( reshape );
 
+
+    glutKeyboardFunc( keyboard );
     // Registra funcao que recebe os eventos de clique do mouse.
-//    glutMotionFunc( mouseMotion );
-    
+    //    glutMotionFunc( mouseMotion );
+
     // Registra a funcao que recebe os eventos do mouse. Essa funcao e chamada
     // toda vez que um botao e pressionado ou liberado.
     glutMouseFunc( mouse );
 
+    initialization( );
+
     // Inicia o loop da glut, o que faz o programa OpenGL começar a rodar.
     glutMainLoop( );
 
-    return ( EXIT_SUCCESS );
+    return ( EXIT_SUCCESS);
 }
+
+
+
+/**
+ * 
+ */
+void initialization( )
+{
+    glGenTextures( 1, &textureId );
+
+    glBindTexture( GL_TEXTURE_1D, textureId );
+
+    GLfloat texture[] = {0.0f, 0.0f, 1.0f, 1.0f, //azul
+        0.0f, 1.0f, 0.0f, 1.0f, //verde
+        1.0f, 1.0f, 0.0f, 1.0f, //amarelo
+        1.0f, 0.0f, 0.0f, 1.0f}; //vermelho
+
+    glTexImage1D( GL_TEXTURE_1D, 0, GL_RGBA, 4, 0, GL_RGBA, GL_FLOAT, texture );
+    // Define os filtros de magnificação e minificação
+    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+
+    // Seleciona o modo de aplicação da textura
+    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+
+    // Ajusta os parâmetros de repetição
+    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+}
+
+
 
 /**
  * Funcao que recebe eventos de redesenho da tela.
@@ -98,16 +143,17 @@ void display( void )
     // Limpa a janela com a cor branca ou preta, dependendo do valor de fundo do grid.
     glClearColor( fabs( colorGrid - 1.0 ), fabs( colorGrid - 1.0 ), fabs( colorGrid - 1.0 ), 0.0 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-       
+
     // Renderiza o grid de referencia que aparece ao fundo da tela.
     renderGrid( );
-    
+
     // Renderiza os pontos de entrada.
     renderPoints( );
-    
+
     // Troca os buffers de escrita e desenho.
     glutSwapBuffers( );
 }
+
 
 
 /**
@@ -156,16 +202,46 @@ void reshape( int width, int heigh )
 void mouse( int button, int state, int x, int y )
 {
     // Converte coordenadas de tela para mundo.
-    Point p ( ((2.0 * winW * x) / widthWin) - winW, 
-            (((2.0 * winH) * (heightWin - y)) / heightWin) - winH );
+    Point p( ((2.0 * winW * x) / (double) widthWin) - winW,
+        (((2.0 * winH) * (heightWin - y)) / (double) heightWin) - winH );
 
-    if (button == GLUT_LEFT_BUTTON)
+    if (state == GLUT_DOWN)
     {
-        points.push_back( p );
+        if (button == GLUT_LEFT_BUTTON)
+        {
+            points.push_back( p );
+        }
     }
-    
+
     display( );
 }
+
+
+
+/*
+ */
+void keyboard( unsigned char key, int x, int y )
+{
+    switch (key)
+    {
+        case 's':
+        case 'S':
+            delete ( kmeans);
+            kmeans = new KMeans( points, numberClusters );
+            break;
+        case 'c':
+            numberClusters--;
+            numberClusters = std::max( numberClusters, 2 );
+            break;
+        case 'C':
+            numberClusters++;
+            break;
+        default:
+            break;
+    }
+    glutPostRedisplay( );
+}
+
 
 
 /**
@@ -174,7 +250,7 @@ void mouse( int button, int state, int x, int y )
 void renderGrid( void )
 {
     double i = 0.0, j = 0.0;
-    
+
     // Desenha quadradinhos do grid ao fundo.
     for (i = -winH; i < winH; i++)
     {
@@ -189,7 +265,7 @@ void renderGrid( void )
             glEnd( );
         }
     }
-    
+
     // Desenha linhas do grid.
     glBegin( GL_LINES );
 
@@ -204,7 +280,7 @@ void renderGrid( void )
         glVertex2f( -winW, i );
         glVertex2f( winW, i );
     }
-    
+
     // Desenha linhas para os eixos X e Y.
     glColor3f( fabs( colorGrid - 0.4f ), fabs( colorGrid - 0.4f ), fabs( colorGrid - 0.4f ) );
     glVertex2f( 0.0, -winH );
@@ -215,6 +291,7 @@ void renderGrid( void )
 }
 
 
+
 /**
  * Funcao que renderiza os pontos de entrada.
  */
@@ -222,21 +299,58 @@ void renderPoints( void )
 {
     if (points.size( ) != 0)
     {
-        glPointSize( 6.0f );
-        glColor3d( 1.0, 0.5, 0.5 );
+        glPointSize( 12.0f );
         glEnable( GL_POINT_SMOOTH );
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        glBegin( GL_POINTS );
-        
-        for (unsigned int i = 0; i < points.size( ); i++)
+        if (kmeans != 0)
         {
-            glVertex2f( points[i].GetXCoordinate( ), points[i].GetYCoordinate( ) );
+            std::vector<ClustersData> clustersData = kmeans->getClustersData( );
+            std::vector<Point> clustersCentroids = kmeans->getClustersCentroids( );
+
+            glEnable( GL_TEXTURE_1D );
+            glBegin( GL_POINTS );
+            for (std::vector<Point>::iterator itC = clustersCentroids.begin( ); itC != clustersCentroids.end( ); itC++)
+            {
+                for (std::vector<ClustersData>::iterator itD = clustersData.begin( ); itD != clustersData.end( ); itD++)
+                {
+                    if (itD->cluster == itC - clustersCentroids.begin( ))
+                    {
+                        double d = (double) (itD->cluster) / (clustersCentroids.size( ) - 1);
+                        glTexCoord1d( d );
+                        glVertex2d( itD->p.GetXCoordinate( ), itD->p.GetYCoordinate( ) );
+                    }
+                }
+            }
+            glEnd( );
+            glBegin( GL_LINES );
+            for (std::vector<Point>::iterator itC = clustersCentroids.begin( ); itC != clustersCentroids.end( ); itC++)
+            {
+                for (std::vector<ClustersData>::iterator itD = clustersData.begin( ); itD != clustersData.end( ); itD++)
+                {
+                    if (itD->cluster == itC - clustersCentroids.begin( ))
+                    {
+                        double d = (double) (itD->cluster) / (clustersCentroids.size( ) - 1);
+                        glTexCoord1d( d );
+                        glVertex2d( itD->p.GetXCoordinate( ), itD->p.GetYCoordinate( ) );
+                        glVertex2d( itC->GetXCoordinate( ), itC->GetYCoordinate( ) );
+                    }
+                }
+            }
+            glEnd( );
+            glDisable( GL_TEXTURE_1D );
         }
-        
-        glEnd( );
+        else
+        {
+            glColor3d( 1.0, 0.5, 0.5 );
+
+            glBegin( GL_POINTS );
+            for (unsigned int i = 0; i < points.size( ); i++)
+            {
+                glVertex2d( points[i].GetXCoordinate( ), points[i].GetYCoordinate( ) );
+            }
+            glEnd( );
+
+        }
         glDisable( GL_POINT_SMOOTH );
-        glDisable( GL_BLEND );
     }
 }
 

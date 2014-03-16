@@ -13,7 +13,7 @@ KMeans::KMeans( std::vector<Point> points, int clusters )
     {
         ClustersData data;
         data.p = *it;
-        data.cluster = -1;
+        data.cluster = 0;
         data.distanceToNearestCluster = std::numeric_limits<double>::infinity();
         clustersData.push_back( data );
     }
@@ -36,7 +36,7 @@ void KMeans::KMeansCentroidsInicialization ( int clusters )
 void KMeans::KMeansClusterization( int clusters )
 {
     KMeansCentroidsInicialization ( clusters );
-    
+    //printf("%u %d %u\n", clustersData.size(), clusters, clustersCentroids.size());
     bool anyChanges = false;
     
     do
@@ -61,34 +61,49 @@ void KMeans::KMeansClusterization( int clusters )
             } 
         }
         
-        KMeansCentroidsUpdate( );
+        KMeansCentroidsUpdate( clusters );
     }
-    while ( !anyChanges ) ;  
+    while ( !anyChanges ) ; 
+    
+    for (std::vector<Point>::iterator itC = clustersCentroids.begin(); itC != clustersCentroids.end(); itC++)
+    {
+        //printf("Aqui\n");
+        printf( "Cluster %d\n", (int) ( itC - clustersCentroids.begin() ) );
+        for (std::vector<ClustersData>::iterator itD = clustersData.begin(); itD != clustersData.end(); itD++)
+        {
+            if ( itD->cluster == itC - clustersCentroids.begin() )
+            {
+                printf( "Point %lf % lf\n", itD->p.GetXCoordinate( ), itD->p.GetYCoordinate( ));
+            }
+        }
+        printf("\n");
+    }
+    
 }
 
 
-void KMeans::KMeansCentroidsUpdate ( void ) 
+void KMeans::KMeansCentroidsUpdate ( int clusters ) 
 {
     // Limpa o vetor de centroides.
     clustersCentroids.clear( );
     
     // Recupera todos os pontos de um mesmo cluster.
-    for (std::vector<Point>::iterator itC = clustersCentroids.begin(); itC != clustersCentroids.end(); itC++)
+    for (int c = 0 ; c < clusters ; c ++ )
     {
         double x = 0.0, y = 0.0;
         int pointsInCluster = 0;
         for (std::vector<ClustersData>::iterator itD = clustersData.begin(); itD != clustersData.end(); itD++)
         {
             // Calcula o novo centroide.
-            if ( itD->cluster == itC - clustersCentroids.begin() )
+            if ( itD->cluster == c )
             {
                 pointsInCluster ++;
                 x += itD->p.GetXCoordinate( );
-                y += itD->p.GetXCoordinate( );
+                y += itD->p.GetYCoordinate( );
             }
         }
-        Point c( x/pointsInCluster, y/pointsInCluster );
-        clustersCentroids.push_back( c );
+        Point nc( x/pointsInCluster, y/pointsInCluster );
+        clustersCentroids.push_back( nc );
     }
 }
 

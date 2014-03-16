@@ -38,12 +38,12 @@ public:
     /**
      * Retorna a coordenada x do ponto.
      */
-    int GetXCoordinate ( void );
+    double GetXCoordinate ( void );
     
     /**
      * Retorna a coordenada y do ponto.
      */
-    int GetYCoordinate ( void );
+    double GetYCoordinate ( void );
     
     /**
      * Destrutor.

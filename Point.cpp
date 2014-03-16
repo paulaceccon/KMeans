@@ -35,13 +35,13 @@ void Point::SetPoint( double x, double y)
 }
 
 
-int Point::GetXCoordinate( void )
+double Point::GetXCoordinate( void )
 {
     return this->x;
 }
 
 
-int Point::GetYCoordinate( void )
+double Point::GetYCoordinate( void )
 {
     return this->y;
 }

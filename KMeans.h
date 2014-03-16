@@ -14,6 +14,7 @@
 #include <limits>
 #include <cmath>
 #include <cstdlib>
+#include <cstdio>
 
 /**
  * Estrutura que armazena um ponto, sua distancia ao cluster mais proximo 
@@ -42,6 +43,26 @@ public:
      */
     std::vector<ClustersData> clustersData;
     std::vector<Point> clustersCentroids;
+    
+    /**
+     * 
+     * @return 
+     */
+    std::vector<Point> getClustersCentroids ( void )
+    {
+        return clustersCentroids;
+    }
+    
+    /**
+     * 
+     * @param clusters
+     */
+    std::vector<ClustersData> getClustersData ( void )
+    {
+        return clustersData;
+    }
+    
+
 private:
     /**
      * Realiza a escolha dos centroides para cada cluster.
@@ -56,7 +77,7 @@ private:
     /**
      * Atualiada os centroides de cada cluster.
      */
-    void KMeansCentroidsUpdate( void );
+    void KMeansCentroidsUpdate( int clusters );
 };
 
 #endif	/* KMEANS_H */
