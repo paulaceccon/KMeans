@@ -67,17 +67,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/kmeans: ${OBJECTFILES}
 ${OBJECTDIR}/_ext/1989226766/KMeans.o: ../KMeans/KMeans.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1989226766
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1989226766/KMeans.o ../KMeans/KMeans.cpp
+	$(COMPILE.cc) -g -I\;../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1989226766/KMeans.o ../KMeans/KMeans.cpp
 
 ${OBJECTDIR}/_ext/1989226766/Point.o: ../KMeans/Point.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1989226766
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1989226766/Point.o ../KMeans/Point.cpp
+	$(COMPILE.cc) -g -I\;../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1989226766/Point.o ../KMeans/Point.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I\;../build/include -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

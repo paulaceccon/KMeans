@@ -16,6 +16,7 @@
         #include <GLUT/glut.h>
 #else
         #include <GL/glut.h>
+        #include <GL/gl.h>
 #endif
 
 void display( void );
@@ -31,11 +32,17 @@ using namespace std;
 // Pontos de entrada.
 std::vector<Point> points;
 
+// Estrutura responsavel por realizar o kmeans.
 KMeans * kmeans = 0;
+
+// Numero de clusters default.
+int numberClusters = 4;
+
 
 unsigned int textureId;
 
-int numberClusters = 4;
+// Decide se deve mostrar os pontos ou a clusterizacao desses pontos.
+bool showKmeans = false;
 
 
 // Define o sistema de coordenadas: (-winW, winW) em X
@@ -203,7 +210,7 @@ void mouse( int button, int state, int x, int y )
 {
     // Converte coordenadas de tela para mundo.
     Point p( ((2.0 * winW * x) / (double) widthWin) - winW,
-        (((2.0 * winH) * (heightWin - y)) / (double) heightWin) - winH );
+           ( ((2.0 * winH) * (heightWin - y)) / (double) heightWin) - winH );
 
     if (state == GLUT_DOWN)
     {
@@ -225,9 +232,12 @@ void keyboard( unsigned char key, int x, int y )
     switch (key)
     {
         case 's':
+            showKmeans = false;
+            break;
         case 'S':
-            delete ( kmeans);
+            delete ( kmeans );
             kmeans = new KMeans( points, numberClusters );
+            showKmeans = true;
             break;
         case 'c':
             numberClusters--;
@@ -301,7 +311,7 @@ void renderPoints( void )
     {
         glPointSize( 12.0f );
         glEnable( GL_POINT_SMOOTH );
-        if (kmeans != 0)
+        if (showKmeans)
         {
             std::vector<ClustersData> clustersData = kmeans->getClustersData( );
             std::vector<Point> clustersCentroids = kmeans->getClustersCentroids( );

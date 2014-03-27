@@ -36,11 +36,15 @@ void KMeans::KMeansCentroidsInicialization ( int clusters )
 void KMeans::KMeansClusterization( int clusters )
 {
     KMeansCentroidsInicialization ( clusters );
-    //printf("%u %d %u\n", clustersData.size(), clusters, clustersCentroids.size());
-    bool anyChanges = false;
     
+    bool anyChanges;
+    
+    printf(">>>> Inicializando KMeans Clusterization\n");
     do
     {
+        anyChanges = false;
+        double sumDistances = 0.0;
+
         for (std::vector<ClustersData>::iterator itD = clustersData.begin(); itD != clustersData.end(); itD++)
         {
             for (std::vector<Point>::iterator itC = clustersCentroids.begin(); itC != clustersCentroids.end(); itC++)
@@ -58,27 +62,16 @@ void KMeans::KMeansClusterization( int clusters )
 
                     anyChanges = true;
                 }
+                
+                sumDistances += itD->distanceToNearestCluster;
+
             } 
         }
+        printf("Distancia: %lf\n", sumDistances);
         
         KMeansCentroidsUpdate( clusters );
     }
-    while ( !anyChanges ) ; 
-    
-    for (std::vector<Point>::iterator itC = clustersCentroids.begin(); itC != clustersCentroids.end(); itC++)
-    {
-        //printf("Aqui\n");
-        printf( "Cluster %d\n", (int) ( itC - clustersCentroids.begin() ) );
-        for (std::vector<ClustersData>::iterator itD = clustersData.begin(); itD != clustersData.end(); itD++)
-        {
-            if ( itD->cluster == itC - clustersCentroids.begin() )
-            {
-                printf( "Point %lf % lf\n", itD->p.GetXCoordinate( ), itD->p.GetYCoordinate( ));
-            }
-        }
-        printf("\n");
-    }
-    
+    while ( anyChanges ); 
 }
 
 
