@@ -14,7 +14,7 @@ Dependencies relies on OpenGL and GLUT.
 
 ## Samples:
 
-<figure hspace="20"">
+<figure style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;" hspace="20">
   <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/points.png" height="300px">
   <figcaption style="display: block;">Set of Points.</figcaption>
 </figure> 
@@ -24,7 +24,7 @@ Dependencies relies on OpenGL and GLUT.
   <figcaption>k = 2</figcaption>
 </figure> 
 
-<figure>
+<figure style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;" hspace="20">
   <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D3.png" height="300px">
   <figcaption>k = 3</figcaption>
 </figure> 
