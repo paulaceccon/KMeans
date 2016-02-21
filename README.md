@@ -34,3 +34,5 @@ Dependencies relies on OpenGL and GLUT.
   <figcaption>k = 5</figcaption>
 </figure> 
 
+<p style="clear: both;">
+
