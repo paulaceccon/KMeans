@@ -16,7 +16,7 @@ Dependencies relies on OpenGL and GLUT.
 
 <figure>
   <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/points.png" style="float: left;" height="300px">
-  <figcaption>Set of Points.</figcaption>
+  <figcaption style="display: block;">Set of Points.</figcaption>
 </figure> 
 
 <figure>
