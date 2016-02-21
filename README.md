@@ -14,23 +14,23 @@ Dependencies relies on OpenGL and GLUT.
 
 ## Samples:
 
-<figure>
-  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/points.png" style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;" height="300px">
+<figure style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;">
+  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/points.png" height="300px">
   <figcaption style="display: block;">Set of Points.</figcaption>
 </figure> 
 
 <figure>
-  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D2.png" style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;" height="300px">
+  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D2.png" height="300px">
   <figcaption>k = 2</figcaption>
 </figure> 
 
 <figure>
-  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D3.png" style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;" height="300px">
+  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D3.png" height="300px">
   <figcaption>k = 3</figcaption>
 </figure> 
 
 <figure>
-  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D5.png" style="float: left; width: 30%; margin-right: 1%; margin-bottom: 0.5em;" height="300px">
+  <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D5.png" height="300px">
   <figcaption>k = 5</figcaption>
 </figure> 
 
