@@ -14,9 +14,7 @@ Dependencies relies on OpenGL and GLUT.
 
 ## Samples:
 
-<img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/points.png" height="300px" hspace="20">
-<img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D2.png" height="300px">
+<img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/points.png" height="300px" hspace="20"> <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D2.png" height="300px">
 <br>
-<img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D3.png" height="300px" hspace="20">
-<img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D5.png" height="300px">
+<img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D3.png" height="300px" hspace="20"> <img src="https://github.com/paulaceccon/KMeans/blob/master/Sample/clusters%3D5.png" height="300px">
 
